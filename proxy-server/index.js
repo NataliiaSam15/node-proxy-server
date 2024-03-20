@@ -1,15 +1,24 @@
+require('dotenv').config();
+
 const axios = require('axios');
 const moment = require('moment');
 
 const DATE_FORMAT = 'YYYY-MM-DD'
-const NASA_API_KEY = '7hkUXfMMXpB9WDJmludTWbQd2wm6LdAf5SohbB91';
+
 const START_DATE = moment().day(1).format(DATE_FORMAT);
 const END_DATE = moment().day(5).format(DATE_FORMAT);
 
-const API_URL = `https://api.nasa.gov/neo/rest/v1/feed?start_date=${START_DATE}&end_date=${END_DATE}&api_key=${NASA_API_KEY}`;
+const NASA_API_KEY = process.env.NASA_API_KEY
+const NASA_API_URL = process.env.NASA_API_URL
 
 const getAllAsteroidsCount = () => {
-    axios.get(API_URL)
+    axios.get(NASA_API_URL, {
+        params: {
+            api_key: NASA_API_KEY,
+            start_date: START_DATE,
+            end_date: END_DATE
+        }
+    })
         .then((response) => {
             printAllAsteroids(response.data)
         })
